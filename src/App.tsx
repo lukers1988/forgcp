@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
 function App() {
-  const [name, setName] = useState<string | undefined>()
+  const [name, setName] = useState<string>('Podaj swoje imie')
 
   return (
     <>
-      <input onChange={((e: any) => setName(e.target.value))} /><br/>
+      <input onChange={((e: HTMLInputElement) => setName(e.value))} /><br/>
 
       {name}
     </>
