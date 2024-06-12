@@ -28,27 +28,16 @@ jobs:
       - name: build application
         run: npm run build
 
-      - name: Archive production-ready files
-        uses: actions/upload-artifact@v3
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
         with:
-          name: build
-          path: ./build/
-  
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
+          terraform_version: 1.3.6
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      
-      - name: Download build actions/upload-artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: build
-          path: ./build/
+      - name: Initialize terraform
+        run: terraform init
       
       - name: Apply Terraform configuration
         run: terraform apply -auto-approve
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PASSWORDKEEPER_70A45 }}
+      
