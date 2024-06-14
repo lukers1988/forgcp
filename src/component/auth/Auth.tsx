@@ -1,9 +1,9 @@
 import { Outlet } from "react-router"
 
 const Auth = () => {
-    return <>
-        <Outlet />
-    </>
+    return <div className="flex align-items-center justify-content-center">
+            <Outlet />
+    </div>
 }
 
 export default Auth;
