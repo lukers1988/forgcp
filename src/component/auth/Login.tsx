@@ -1,7 +1,34 @@
-import { Link } from "react-router-dom";
+import { auth } from "../../config/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { ChangeEvent, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { loginFailure, loginStart, loginSuccess } from "../../store/UserReducer";
 
 const Login = () => {
+    const [user, setUser] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const dispatch = useDispatch();
+    const reduxError = useSelector((state: any) => state.user.error);
+    const navigate = useNavigate();
+
+    const handleLogin = async (): Promise<void> => {
+      dispatch(loginStart());
+
+      try { 
+        const userCredentials = await signInWithEmailAndPassword(auth, user, password);
+
+        dispatch(loginSuccess(userCredentials.user));
+        navigate('/');
+
+      } catch (error: any) {
+        console.log(error.message);
+        dispatch(loginFailure(error.message))
+      }
+    }
+
     return <section className="vh-100 gradient-custom">
+      {reduxError}
     <div className="container py-5 h-100">
       <div className="row d-flex justify-content-center align-items-center h-100">
         <div className="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -14,18 +41,19 @@ const Login = () => {
                 <p className="text-white-50 mb-5">Please enter your login and password!</p>
   
                 <div data-mdb-input-init className="form-outline form-white mb-4">
-                  <input type="email" id="typeEmailX" className="form-control form-control-lg" />
+                  <input type="email" id="typeEmailX" className="form-control form-control-lg" onChange={(event: ChangeEvent<HTMLInputElement>) => setUser(event.target.value)}/>
                   <label className="form-label" >Email</label>
+                  {user}
                 </div>
   
                 <div data-mdb-input-init className="form-outline form-white mb-4">
-                  <input type="password" id="typePasswordX" className="form-control form-control-lg" />
+                  <input type="password" id="typePasswordX" className="form-control form-control-lg" onChange={(event: ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)}/>
                   <label className="form-label" >Password</label>
                 </div>
   
                 <p className="small mb-5 pb-lg-2"><a className="text-white-50" href="#!">Forgot password?</a></p>
   
-                <button data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+                <button data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-light btn-lg px-5" type="submit" onClick={handleLogin}>Login</button>
   
                 <div className="d-flex justify-content-center text-center mt-4 pt-1">
                   <a href="#!" className="text-white" style={{marginRight: '20px'}}><i className="pi pi-facebook"></i></a>
