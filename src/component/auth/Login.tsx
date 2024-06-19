@@ -1,15 +1,19 @@
 import { auth } from "../../config/firebase";
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { loginFailure, loginStart, loginSuccess } from "../../store/UserReducer";
+import { InputText } from "primereact/inputtext";
+import { Password } from "primereact/password";
+import { Button } from "primereact/button";
+import { Card } from "primereact/card";
+import { Divider } from "primereact/divider";
 
 const Login = () => {
     const [user, setUser] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const dispatch = useDispatch();
-    const reduxError = useSelector((state: any) => state.user.error);
     const status = useSelector((state: any) => state.user.status);
     const navigate = useNavigate();
 
@@ -49,52 +53,28 @@ const Login = () => {
       }
     }
 
-    return <section className="vh-100 gradient-custom">
-      {reduxError}
-    <div className="container py-5 h-100">
-      <div className="row d-flex justify-content-center align-items-center h-100">
-        <div className="col-12 col-md-8 col-lg-6 col-xl-5">
-          <div className="card bg-dark text-white" style={{"borderRadius": "1rem"}}>
-            <div className="card-body p-5 text-center">
-  
-              <div className="mb-md-5 mt-md-4 pb-5">
-  
-                <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
-                <p className="text-white-50 mb-5">Please enter your login and password!</p>
-  
-                <div data-mdb-input-init className="form-outline form-white mb-4">
-                  <input type="email" id="typeEmailX" className="form-control form-control-lg" onChange={(event: ChangeEvent<HTMLInputElement>) => setUser(event.target.value)}/>
-                  <label className="form-label" >Email</label>
-                  {user}
-                </div>
-  
-                <div data-mdb-input-init className="form-outline form-white mb-4">
-                  <input type="password" id="typePasswordX" className="form-control form-control-lg" onChange={(event: ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)}/>
-                  <label className="form-label" >Password</label>
-                </div>
-  
-                <p className="small mb-5 pb-lg-2"><a className="text-white-50" href="#!">Forgot password?</a></p>
-  
-                <button disabled={status === 'loading'} data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-light btn-lg px-5" type="submit" onClick={handleLogin}>Login</button>
-  
-                <div className="d-flex justify-content-center text-center mt-4 pt-1">
-                  <a href="#!" className="text-white" style={{marginRight: '20px'}}><i className="pi pi-facebook"></i></a>
-                  <a href="#!" className="text-white" style={{marginRight: '20px'}}><i className="pi pi-twitter"></i></a>
-                  <a href="#!" className="text-white" onClick={handleGoogleLogin}><i className="pi pi-google"></i></a>
-                </div>
-  
-              </div>
-  
-              <div>
-                <p className="mb-0">Don't have an account? <Link to={'/auth/register'} className="text-white-50 fw-bold">Sign up</Link></p>
-              </div>
-  
-            </div>
+    return <div className="login-container">
+      <Card title="Login" className="p-shadow-24">
+        <div className="p-fluid">
+          <div className="p-field">
+              <label htmlFor="username">Username</label>
+              <InputText id="username" value={user} onChange={(e) => setUser(e.target.value)} />
           </div>
+          <div className="p-field">
+              <label htmlFor="password">Password</label>
+              <Password id="password" value={password} onChange={(e) => setPassword(e.target.value)} feedback={false} />
+          </div>
+          <Button disabled={status === 'loading'} label="Login" icon="pi pi-user" onClick={handleLogin} className="p-mt-2" style={{marginTop: '20px'}} />
+          <Divider />
+            <div className="d-flex justify-content-center text-center mt-4 pt-1">
+              <i className="pi pi-google" onClick={handleGoogleLogin} style={{marginRight: '20px'}} />
+              <i className="pi pi-facebook" style={{marginRight: '20px'}} />
+            </div>
+          <Divider />
+          Not have account yet? <Link to={'/auth/register'}>Create account</Link>
         </div>
-      </div>
-    </div>
-  </section>
+      </Card>
+  </div>
 }
 
 export default Login;

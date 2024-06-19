@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom/client'
 import MainRoutes from './config/main_routes.tsx'
 import { PrimeReactProvider } from 'primereact/api';
 import { Provider } from 'react-redux';
-import "primereact/resources/themes/lara-light-cyan/theme.css";
-import 'primeicons/primeicons.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'primereact/resources/themes/saga-blue/theme.css';  // Import the PrimeReact theme
+import 'primereact/resources/primereact.min.css';         // Import PrimeReact CSS
+import 'primeicons/primeicons.css';     
+import 'primeflex/primeflex.css';
 import store from './store/store.ts';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
