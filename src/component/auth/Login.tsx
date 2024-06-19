@@ -10,6 +10,7 @@ const Login = () => {
     const [password, setPassword] = useState<string>('');
     const dispatch = useDispatch();
     const reduxError = useSelector((state: any) => state.user.error);
+    const status = useSelector((state: any) => state.user.status);
     const navigate = useNavigate();
 
     const handleGoogleLogin = async(): Promise<void> => {
@@ -74,7 +75,7 @@ const Login = () => {
   
                 <p className="small mb-5 pb-lg-2"><a className="text-white-50" href="#!">Forgot password?</a></p>
   
-                <button data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-light btn-lg px-5" type="submit" onClick={handleLogin}>Login</button>
+                <button disabled={status === 'loading'} data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-light btn-lg px-5" type="submit" onClick={handleLogin}>Login</button>
   
                 <div className="d-flex justify-content-center text-center mt-4 pt-1">
                   <a href="#!" className="text-white" style={{marginRight: '20px'}}><i className="pi pi-facebook"></i></a>
