@@ -1,5 +1,5 @@
 import { auth } from "../../config/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { ChangeEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,6 +11,27 @@ const Login = () => {
     const dispatch = useDispatch();
     const reduxError = useSelector((state: any) => state.user.error);
     const navigate = useNavigate();
+
+    const handleGoogleLogin = async(): Promise<void> => {
+      dispatch(loginStart());
+
+      try {
+        const provider = new GoogleAuthProvider();
+
+        provider.setCustomParameters({
+          prompt: 'select_account',
+        });
+
+        const userCredentials = await signInWithPopup(auth, provider);
+
+        dispatch(loginSuccess(userCredentials.user));
+        navigate('/');
+
+      } catch (error: any) {
+        console.log(error.message);
+        dispatch(loginFailure(error.message));
+      }
+    }
 
     const handleLogin = async (): Promise<void> => {
       dispatch(loginStart());
@@ -58,7 +79,7 @@ const Login = () => {
                 <div className="d-flex justify-content-center text-center mt-4 pt-1">
                   <a href="#!" className="text-white" style={{marginRight: '20px'}}><i className="pi pi-facebook"></i></a>
                   <a href="#!" className="text-white" style={{marginRight: '20px'}}><i className="pi pi-twitter"></i></a>
-                  <a href="#!" className="text-white"><i className="pi pi-google"></i></a>
+                  <a href="#!" className="text-white" onClick={handleGoogleLogin}><i className="pi pi-google"></i></a>
                 </div>
   
               </div>
