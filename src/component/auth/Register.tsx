@@ -1,6 +1,35 @@
-import { Link } from "react-router-dom";
+import { auth } from "../../config/firebase";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { loginFailure, loginStart, loginSuccess } from "../../store/UserReducer";
 
 const Register = () => {
+    const dispatch = useDispatch();
+    const status = useSelector((state: any) => state.user.status);
+    const navigate = useNavigate();
+
+    const handleGoogleRegister = async(): Promise<void> => {
+      dispatch(loginStart());
+
+      try {
+        const provider = new GoogleAuthProvider();
+
+        provider.setCustomParameters({
+          prompt: 'select_account',
+        });
+
+        const userCredentials = await signInWithPopup(auth, provider);
+
+        dispatch(loginSuccess(userCredentials.user));
+        navigate('/');
+
+      } catch (error: any) {
+        console.log(error.message);
+        dispatch(loginFailure(error.message));
+      }
+    }
+
     return <section className="vh-100 gradient-custom">
     <div className="container py-5 h-100">
       <div className="row d-flex justify-content-center align-items-center h-100">
@@ -25,12 +54,12 @@ const Register = () => {
   
                 <p className="small mb-5 pb-lg-2"><a className="text-white-50" href="#!">Forgot password?</a></p>
   
-                <button data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+                <button  disabled={status === 'loading'} data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
   
                 <div className="d-flex justify-content-center text-center mt-4 pt-1">
                   <a href="#!" className="text-white" style={{marginRight: '20px'}}><i className="pi pi-facebook"></i></a>
                   <a href="#!" className="text-white" style={{marginRight: '20px'}}><i className="pi pi-twitter"></i></a>
-                  <a href="#!" className="text-white"><i className="pi pi-google"></i></a>
+                  <a href="#!" className="text-white" onClick={handleGoogleRegister}><i className="pi pi-google"></i></a>
                 </div>
   
               </div>
