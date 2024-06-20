@@ -1,9 +1,9 @@
-import { auth } from '../config/firebase';
+import { auth } from '@appConfig/firebase';
 import { signOut } from 'firebase/auth';
 import { Button } from 'primereact/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logout } from '../store/UserReducer';
+import { logout } from '@appStore/UserReducer';
 import { Menubar } from 'primereact/menubar';
 import { Chart } from 'primereact/chart';
 import { PanelMenu } from 'primereact/panelmenu';

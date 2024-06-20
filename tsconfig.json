@@ -22,7 +22,8 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@appComponents/*": ["component/*"],
-      "@appConfig/*": ["config/*"]
+      "@appConfig/*": ["config/*"],
+      "@appStore/*": ["store/*"]
     }
   },
   "include": ["src"],

@@ -1,8 +1,8 @@
-import { auth } from "../../config/firebase";
+import { auth } from "@appConfig/firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { loginFailure, loginStart, loginSuccess } from "../../store/UserReducer";
+import { loginFailure, loginStart, loginSuccess } from "@appStore/UserReducer";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
